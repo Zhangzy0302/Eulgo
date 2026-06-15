@@ -1,17 +1,35 @@
-//
-//  EulgoApp.swift
-//  Eulgo
-//
-//  Created by yangyang on 2026/6/4.
-//
+
 
 import SwiftUI
 
 @main
 struct EulgoApp: App {
+    init() {
+        StarterSeedInitialData.starterSeedInitializeIfNeeded()
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SessionGateRootView()
+                .fairwayGreenDismissKeyboardOnTap()
+                .golfPulseGlobalOverlay()
+        }
+    }
+}
+
+private struct SessionGateRootView: View {
+    @State private var sessionGateIsLoggedIn = PlayerBadgeSessionStore.playerBadgeReadLoginUser() != nil
+
+    var body: some View {
+        Group {
+            if sessionGateIsLoggedIn {
+                ClubHouseHomeView()
+            } else {
+                FairwayCircleGuideView()
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: PlayerBadgeSessionStore.playerBadgeSessionDidChangeNotification)) { _ in
+            sessionGateIsLoggedIn = PlayerBadgeSessionStore.playerBadgeReadLoginUser() != nil
         }
     }
 }
