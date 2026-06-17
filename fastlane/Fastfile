@@ -137,7 +137,7 @@ platform :ios do
     update_code_signing_settings(
       path: "Eulgo.xcodeproj",
       use_automatic_signing: false,
-      team_id: "C6YBQGH9WL",
+      team_id: "59PUJ4TH72",
       targets: ["Eulgo"],
       code_sign_identity: "Apple Distribution",
       profile_name: "match AppStore com.eulgcecalbei.Eulgo",
