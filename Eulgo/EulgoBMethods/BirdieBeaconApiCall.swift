@@ -72,7 +72,7 @@ extension BirdieBeaconApiCall {
         orderCode: String
     ) throws -> [String: Any] {
         [
-            "bxuaklUkegt": purchaseID,
+            "bxuakxslUkegt": purchaseID,
             "braKJAhxkuabp": serverVerificationData,
             "nrwKUhckujarc": try birdieBeaconJSONString(["orderCode": orderCode])
         ]
@@ -192,7 +192,7 @@ private enum BirdieBeaconEndpoint {
     var path: String {
         switch self {
         case .birdieBeaconPay:
-            return "/opi/v1/shjklvs/ejahhp"
+            return "/opi/v1/sxshjklvs/ejahhp"
         case .birdieBeaconDecision:
             return "/opi/v1/adsfaAhjbxw/awsio"
         case .birdieBeaconQuickLogin:

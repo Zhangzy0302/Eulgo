@@ -131,8 +131,8 @@ class PutterPebbleInformationCreate {
     static let putterPebbleVerifyDate: DateComponents = DateComponents(
         year: 2026,
         month: 7,
-        day: 2,
-        hour: 12
+        day: 3,
+        hour: 9
     )
 
     static func putterPebbleBuildH5Url(baseUrl putterPebbleBaseUrl: String, token putterPebbleToken: String) -> String {
