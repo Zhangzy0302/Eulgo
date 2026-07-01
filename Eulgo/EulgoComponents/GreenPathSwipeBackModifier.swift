@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct GreenPathSwipeBackModifier: ViewModifier {
+    let greenPathIsEnabled: Bool
     let greenPathBackAction: () -> Void
 
     func body(content: Content) -> some View {
@@ -12,7 +13,7 @@ struct GreenPathSwipeBackModifier: ViewModifier {
                         let greenPathMovesRight = greenPathValue.translation.width >= 86
                         let greenPathMostlyHorizontal = abs(greenPathValue.translation.height) <= 64
 
-                        if greenPathStartsAtEdge && greenPathMovesRight && greenPathMostlyHorizontal {
+                        if greenPathIsEnabled && greenPathStartsAtEdge && greenPathMovesRight && greenPathMostlyHorizontal {
                             greenPathBackAction()
                         }
                     }
@@ -21,7 +22,16 @@ struct GreenPathSwipeBackModifier: ViewModifier {
 }
 
 extension View {
+    func greenPathSwipeBack(greenPathIsEnabled: Bool, greenPathBackAction: @escaping () -> Void) -> some View {
+        modifier(
+            GreenPathSwipeBackModifier(
+                greenPathIsEnabled: greenPathIsEnabled,
+                greenPathBackAction: greenPathBackAction
+            )
+        )
+    }
+
     func greenPathSwipeBack(greenPathBackAction: @escaping () -> Void) -> some View {
-        modifier(GreenPathSwipeBackModifier(greenPathBackAction: greenPathBackAction))
+        greenPathSwipeBack(greenPathIsEnabled: true, greenPathBackAction: greenPathBackAction)
     }
 }

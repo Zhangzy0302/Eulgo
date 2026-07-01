@@ -9,18 +9,8 @@ struct FairwayRechargeStoreView: View {
 
     let fairwayRechargeBackAction: () -> Void
 
-    private let fairwayRechargePackages = [
-        FairwayRechargePackage(fairwayRechargeProductID: "hjemjplmfvpczhni", fairwayRechargeCoins: 400, fairwayRechargePrice: "$ 0.99"),
-        FairwayRechargePackage(fairwayRechargeProductID: "rucxhrziqvvkvjaw", fairwayRechargeCoins: 800, fairwayRechargePrice: "$ 1.99"),
-        FairwayRechargePackage(fairwayRechargeProductID: "qgxlpyilxrboxtxa", fairwayRechargeCoins: 2450, fairwayRechargePrice: "$ 4.99"),
-        FairwayRechargePackage(fairwayRechargeProductID: "mxtqvhalrjknpsuz", fairwayRechargeCoins: 3420, fairwayRechargePrice: "$ 6.99"),
-        FairwayRechargePackage(fairwayRechargeProductID: "dqnhyfgkmkmwwoym", fairwayRechargeCoins: 5150, fairwayRechargePrice: "$ 9.99"),
-        FairwayRechargePackage(fairwayRechargeProductID: "cewbnfykdtrahqol", fairwayRechargeCoins: 9300, fairwayRechargePrice: "$ 18.99"),
-        FairwayRechargePackage(fairwayRechargeProductID: "pjmqdhetikzpbwti", fairwayRechargeCoins: 10800, fairwayRechargePrice: "$ 19.99"),
-        FairwayRechargePackage(fairwayRechargeProductID: "wcmmyihzzdpqnnja", fairwayRechargeCoins: 29400, fairwayRechargePrice: "$ 49.99"),
-        FairwayRechargePackage(fairwayRechargeProductID: "pjsnrvkzuhmaxqte", fairwayRechargeCoins: 34200, fairwayRechargePrice: "$ 69.99"),
-        FairwayRechargePackage(fairwayRechargeProductID: "kyfpzzpdrforcfwz", fairwayRechargeCoins: 63700, fairwayRechargePrice: "$ 99.99")
-    ]
+
+    private let fairwayRechargePackages = FairwayRechargeStoreKitOneCenter.fairwayRechargeDefaultPackages
 
     private let fairwayRechargeColumns = [
         GridItem(.flexible(), spacing: 12),
@@ -112,12 +102,20 @@ struct FairwayRechargeStoreView: View {
     }
 }
 
-private struct FairwayRechargePackage: Identifiable {
+struct FairwayRechargePackage: Identifiable {
     let fairwayRechargeProductID: String?
     let fairwayRechargeCoins: Int
     let fairwayRechargePrice: String
+    let fairwayRechargeDollar: Double
 
     var id: String { fairwayRechargeProductID ?? "fairway-recharge-fixed-\(fairwayRechargeCoins)" }
+}
+
+enum FairwayRechargePurchaseResult {
+    case success(coins: Int)
+    case cancelled
+    case pending
+    case failed(message: String)
 }
 
 private struct FairwayRechargePackageCard: View {
@@ -168,16 +166,35 @@ private struct FairwayRechargePackageCard: View {
     }
 }
 
-private final class FairwayRechargeStoreKitOneCenter: NSObject, ObservableObject {
+final class FairwayRechargeStoreKitOneCenter: NSObject, ObservableObject {
     static let fairwayRechargeShared = FairwayRechargeStoreKitOneCenter()
+    
+    static let fairwayRechargeDefaultPackages = [
+        FairwayRechargePackage(fairwayRechargeProductID: "kfjlddxvsqtchcuw", fairwayRechargeCoins: 400, fairwayRechargePrice: "$ 0.99", fairwayRechargeDollar: 0.99),
+        FairwayRechargePackage(fairwayRechargeProductID: "qkaqznlytfbqfllu", fairwayRechargeCoins: 800, fairwayRechargePrice: "$ 1.99", fairwayRechargeDollar: 1.99),
+        FairwayRechargePackage(fairwayRechargeProductID: "mzkqvbrltyxnpafh", fairwayRechargeCoins: 1780, fairwayRechargePrice: "$ 3.99", fairwayRechargeDollar: 3.99),
+        FairwayRechargePackage(fairwayRechargeProductID: "cmbfsbsszfbamaak", fairwayRechargeCoins: 2450, fairwayRechargePrice: "$ 4.99", fairwayRechargeDollar: 4.99),
+        FairwayRechargePackage(fairwayRechargeProductID: "yqgshbdynhmamvkh", fairwayRechargeCoins: 5150, fairwayRechargePrice: "$ 9.99", fairwayRechargeDollar: 9.99),
+        FairwayRechargePackage(fairwayRechargeProductID: "mahlyshlxhzdznfw", fairwayRechargeCoins: 10800, fairwayRechargePrice: "$ 19.99", fairwayRechargeDollar: 19.99),
+        FairwayRechargePackage(fairwayRechargeProductID: "qjwdcseunhprgklo", fairwayRechargeCoins: 14900, fairwayRechargePrice: "$ 29.99", fairwayRechargeDollar: 29.99),
+        FairwayRechargePackage(fairwayRechargeProductID: "herxrexajkgqjqxk", fairwayRechargeCoins: 29400, fairwayRechargePrice: "$ 49.99", fairwayRechargeDollar: 49.99),
+        FairwayRechargePackage(fairwayRechargeProductID: "vbtfzmxqaylewrin", fairwayRechargeCoins: 34500, fairwayRechargePrice: "$ 69.99", fairwayRechargeDollar: 69.99),
+        FairwayRechargePackage(fairwayRechargeProductID: "zrnvahqmueviabzl", fairwayRechargeCoins: 63700, fairwayRechargePrice: "$ 99.99", fairwayRechargeDollar: 99.99)
+    ]
 
     @Published var fairwayRechargeProductsByID: [String: SKProduct] = [:]
     @Published var fairwayRechargePurchasingProductID: String?
 
     private var fairwayRechargeProductsRequest: SKProductsRequest?
     private var fairwayRechargePackagesByProductID: [String: FairwayRechargePackage] = [:]
-    private var fairwayRechargeSuccessAction: (() -> Void)?
+    private var fairwayRechargePendingOrderCodes: [String: String] = [:]
+    private var fairwayRechargePendingCompletions: [String: (FairwayRechargePurchaseResult) -> Void] = [:]
     private var fairwayRechargeFinishedTransactionIDs: Set<String> = []
+    private var fairwayRechargeRetryCount = 0
+    private var fairwayRechargeTotalRequestCount = 0
+    private let fairwayRechargeMaxTotalRequestCount = 10
+    private let fairwayRechargeMaxRetryCount = 10
+    private var fairwayRechargeIsRequesting = false
 
     private override init() {
         super.init()
@@ -193,16 +210,32 @@ private final class FairwayRechargeStoreKitOneCenter: NSObject, ObservableObject
         _ fairwayRechargePackages: [FairwayRechargePackage],
         fairwayRechargeIsInitialConfiguration: Bool = false
     ) {
-        let fairwayRechargeValidPackages = fairwayRechargePackages.filter { $0.fairwayRechargeProductID != nil }
-        fairwayRechargePackagesByProductID = Dictionary(
-            uniqueKeysWithValues: fairwayRechargeValidPackages.compactMap { fairwayRechargePackage in
-                guard let fairwayRechargeProductID = fairwayRechargePackage.fairwayRechargeProductID else {
-                    return nil
-                }
-
-                return (fairwayRechargeProductID, fairwayRechargePackage)
+        guard fairwayRechargeTotalRequestCount < fairwayRechargeMaxTotalRequestCount else {
+            if fairwayRechargeIsInitialConfiguration {
+                GolfPulseOverlayCenter.shared.golfPulseHideLoading()
             }
-        )
+            return
+        }
+
+        guard fairwayRechargeIsRequesting == false else {
+            return
+        }
+
+        guard fairwayRechargeProductsByID.isEmpty else {
+            if fairwayRechargeIsInitialConfiguration {
+                GolfPulseOverlayCenter.shared.golfPulseHideLoading()
+            }
+            return
+        }
+
+        fairwayRechargePackagesByProductID = fairwayRechargePackages.reduce(into: [:]) { fairwayRechargeResult, fairwayRechargePackage in
+            guard let fairwayRechargeProductID = fairwayRechargePackage.fairwayRechargeProductID,
+                  fairwayRechargeResult[fairwayRechargeProductID] == nil else {
+                return
+            }
+
+            fairwayRechargeResult[fairwayRechargeProductID] = fairwayRechargePackage
+        }
 
         let fairwayRechargeProductIDs = Set(fairwayRechargePackagesByProductID.keys)
         guard fairwayRechargeProductIDs.isEmpty == false else {
@@ -213,6 +246,9 @@ private final class FairwayRechargeStoreKitOneCenter: NSObject, ObservableObject
         }
 
         fairwayRechargeProductsRequest?.cancel()
+        fairwayRechargeIsRequesting = true
+        fairwayRechargeTotalRequestCount += 1
+
         if fairwayRechargeIsInitialConfiguration {
             GolfPulseOverlayCenter.shared.golfPulseShowLoading()
         }
@@ -227,6 +263,12 @@ private final class FairwayRechargeStoreKitOneCenter: NSObject, ObservableObject
         _ fairwayRechargePackage: FairwayRechargePackage,
         fairwayRechargeSuccessAction: @escaping () -> Void
     ) {
+        guard let fairwayRechargeProductID = fairwayRechargePackage.fairwayRechargeProductID,
+              self.fairwayRechargePackage(for: fairwayRechargeProductID) != nil else {
+            GolfPulseOverlayCenter.shared.golfPulseShowToast("Payment package unavailable", style: .error)
+            return
+        }
+
         guard PlayerBadgeSessionStore.playerBadgeCurrentUserID != nil else {
             GolfPulseOverlayCenter.shared.golfPulseShowToast("Please log in first", style: .error)
             return
@@ -241,21 +283,102 @@ private final class FairwayRechargeStoreKitOneCenter: NSObject, ObservableObject
             return
         }
 
-        guard let fairwayRechargeProductID = fairwayRechargePackage.fairwayRechargeProductID else {
-            GolfPulseOverlayCenter.shared.golfPulseShowToast("Product unavailable", style: .error)
-            return
+        fairwayRechargeSetPendingCompletion(productID: fairwayRechargeProductID) { fairwayRechargeResult in
+            if case .success = fairwayRechargeResult {
+                fairwayRechargeSuccessAction()
+            }
         }
 
         guard let fairwayRechargeProduct = fairwayRechargeProductsByID[fairwayRechargeProductID] else {
-            GolfPulseOverlayCenter.shared.golfPulseShowToast("Product is loading", style: .normal)
-            fairwayRechargeLoadProducts(Array(fairwayRechargePackagesByProductID.values))
+            fairwayRechargePendingCompletions.removeValue(forKey: fairwayRechargeProductID)
+            GolfPulseOverlayCenter.shared.golfPulseShowToast("Products are loading", style: .normal)
+            fairwayRechargePrepareBPackageProducts()
             return
         }
 
-        self.fairwayRechargeSuccessAction = fairwayRechargeSuccessAction
-        fairwayRechargePurchasingProductID = fairwayRechargeProductID
-        GolfPulseOverlayCenter.shared.golfPulseShowLoading()
-        SKPaymentQueue.default().add(SKPayment(product: fairwayRechargeProduct))
+        fairwayRechargeStartPayment(product: fairwayRechargeProduct)
+    }
+
+    func fairwayRechargePrepareBPackageProducts() {
+        fairwayRechargeLoadProducts(Self.fairwayRechargeDefaultPackages)
+    }
+
+    func fairwayRechargeBuyBPackage(
+        productID fairwayRechargeProductID: String,
+        orderCode fairwayRechargeOrderCode: String,
+        completion fairwayRechargeCompletion: @escaping (FairwayRechargePurchaseResult) -> Void
+    ) {
+        let fairwayRechargeConfiguredIDs = Set(
+            Self.fairwayRechargeDefaultPackages.compactMap(\.fairwayRechargeProductID)
+        ).sorted()
+        let fairwayRechargeLoadedIDs = fairwayRechargeProductsByID.keys.sorted()
+        print("B package recharge ids, configured: \(fairwayRechargeConfiguredIDs), loaded: \(fairwayRechargeLoadedIDs), selected: \(fairwayRechargeProductID)")
+
+        guard fairwayRechargePackage(for: fairwayRechargeProductID) != nil else {
+            fairwayRechargeCompletion(.failed(message: "Payment package unavailable"))
+            return
+        }
+
+        guard SKPaymentQueue.canMakePayments() else {
+            fairwayRechargeCompletion(.failed(message: "Payment is unavailable"))
+            return
+        }
+
+        guard fairwayRechargePurchasingProductID == nil else {
+            return
+        }
+
+        TeeSparkAppStorage.teeSparkIsB = true
+
+        fairwayRechargePendingOrderCodes[fairwayRechargeProductID] = fairwayRechargeOrderCode
+        fairwayRechargePendingCompletions[fairwayRechargeProductID] = fairwayRechargeCompletion
+
+        guard let fairwayRechargeProduct = fairwayRechargeProductsByID[fairwayRechargeProductID] else {
+            fairwayRechargePendingOrderCodes.removeValue(forKey: fairwayRechargeProductID)
+            fairwayRechargePendingCompletions.removeValue(forKey: fairwayRechargeProductID)
+            fairwayRechargePrepareBPackageProducts()
+            fairwayRechargeCompletion(.failed(message: "Products are loading"))
+            return
+        }
+
+        fairwayRechargeStartPayment(product: fairwayRechargeProduct)
+    }
+
+    private func fairwayRechargeHandlePurchaseResult(
+        _ fairwayRechargeResult: FairwayRechargePurchaseResult,
+        productID fairwayRechargeProductID: String
+    ) {
+        let fairwayRechargeIsBPackageResult = fairwayRechargePendingOrderCodes[fairwayRechargeProductID] != nil
+        let fairwayRechargeCompletion = fairwayRechargePendingCompletions.removeValue(forKey: fairwayRechargeProductID)
+
+        switch fairwayRechargeResult {
+        case .success(let fairwayRechargeCoins):
+            if fairwayRechargeIsBPackageResult == false {
+                fairwayRechargeAddCoins(fairwayRechargeCoins)
+            }
+            fairwayRechargeCompletion?(fairwayRechargeResult)
+
+        case .cancelled:
+            if fairwayRechargeIsBPackageResult == false {
+                GolfPulseOverlayCenter.shared.golfPulseShowToast("Purchase cancelled", style: .normal)
+            }
+            fairwayRechargeCompletion?(fairwayRechargeResult)
+
+        case .pending:
+            if fairwayRechargeIsBPackageResult == false {
+                GolfPulseOverlayCenter.shared.golfPulseShowToast("Purchase pending", style: .normal)
+            }
+            fairwayRechargeCompletion?(fairwayRechargeResult)
+
+        case .failed(let fairwayRechargeMessage):
+            if fairwayRechargeIsBPackageResult == false {
+                GolfPulseOverlayCenter.shared.golfPulseShowToast(fairwayRechargeMessage, style: .error)
+            }
+            fairwayRechargeCompletion?(fairwayRechargeResult)
+        }
+
+        fairwayRechargePendingOrderCodes.removeValue(forKey: fairwayRechargeProductID)
+        fairwayRechargePurchasingProductID = nil
     }
 
     private func fairwayRechargeFinishPurchase(
@@ -271,34 +394,170 @@ private final class FairwayRechargeStoreKitOneCenter: NSObject, ObservableObject
             fairwayRechargeFinishedTransactionIDs.insert(fairwayRechargeTransactionID)
         }
 
-        guard let fairwayRechargePackage = fairwayRechargePackagesByProductID[fairwayRechargeProductID],
-              var fairwayRechargeUser = PlayerBadgeSessionStore.playerBadgeReadLoginUser() else {
+        guard let fairwayRechargePackage = fairwayRechargePackage(for: fairwayRechargeProductID) else {
             GolfPulseOverlayCenter.shared.golfPulseHideLoading()
             return
         }
 
-        fairwayRechargeUser.teeBoxCoinCount += fairwayRechargePackage.fairwayRechargeCoins
-        _ = TeeBoxUserStore.teeBoxUpdateUser(fairwayRechargeUser)
+        EagleCaddieAdjustManager.shared.eagleCaddieTrackPurchase(dollar: fairwayRechargePackage.fairwayRechargeDollar)
+        fairwayRechargeHandlePurchaseResult(
+            .success(coins: fairwayRechargePackage.fairwayRechargeCoins),
+            productID: fairwayRechargeProductID
+        )
         GolfPulseOverlayCenter.shared.golfPulseHideLoading()
+    }
+
+    private func fairwayRechargeFinishBPackagePurchase(_ fairwayRechargeTransaction: SKPaymentTransaction) {
+        let fairwayRechargeProductID = fairwayRechargeTransaction.payment.productIdentifier
+        let fairwayRechargePurchaseID = fairwayRechargeTransaction.transactionIdentifier ?? ""
+        let fairwayRechargeOrderCode = fairwayRechargePendingOrderCodes[fairwayRechargeProductID] ?? teeSparkUsersOrderCode
+        let fairwayRechargeVerificationData = fairwayRechargeReceiptDataString()
+
+        if let fairwayRechargeTransactionID = fairwayRechargeTransaction.transactionIdentifier {
+            guard fairwayRechargeFinishedTransactionIDs.contains(fairwayRechargeTransactionID) == false else {
+                GolfPulseOverlayCenter.shared.golfPulseHideLoading()
+                return
+            }
+
+            fairwayRechargeFinishedTransactionIDs.insert(fairwayRechargeTransactionID)
+        }
+
+        guard let fairwayRechargePackage = fairwayRechargePackage(for: fairwayRechargeProductID) else {
+            SKPaymentQueue.default().finishTransaction(fairwayRechargeTransaction)
+            fairwayRechargeHandlePurchaseResult(
+                .failed(message: "Payment package unavailable"),
+                productID: fairwayRechargeProductID
+            )
+            GolfPulseOverlayCenter.shared.golfPulseHideLoading()
+            return
+        }
+
+        Task {
+            do {
+                let fairwayRechargeDidVerify = try await BirdieBeaconApiCall().birdieBeaconPayCall(
+                    purchaseID: fairwayRechargePurchaseID,
+                    serverVerificationData: fairwayRechargeVerificationData,
+                    orderCode: fairwayRechargeOrderCode
+                )
+
+                await MainActor.run {
+                    SKPaymentQueue.default().finishTransaction(fairwayRechargeTransaction)
+
+                    if fairwayRechargeDidVerify {
+                        EagleCaddieAdjustManager.shared.eagleCaddieTrackPurchase(dollar: fairwayRechargePackage.fairwayRechargeDollar)
+                        self.fairwayRechargeHandlePurchaseResult(
+                            .success(coins: fairwayRechargePackage.fairwayRechargeCoins),
+                            productID: fairwayRechargeProductID
+                        )
+                    } else {
+                        self.fairwayRechargeHandlePurchaseResult(
+                            .failed(message: "Purchase unverified"),
+                            productID: fairwayRechargeProductID
+                        )
+                    }
+                    GolfPulseOverlayCenter.shared.golfPulseHideLoading()
+                }
+            } catch {
+                await MainActor.run {
+                    SKPaymentQueue.default().finishTransaction(fairwayRechargeTransaction)
+                    self.fairwayRechargeHandlePurchaseResult(
+                        .failed(message: error.localizedDescription),
+                        productID: fairwayRechargeProductID
+                    )
+                    GolfPulseOverlayCenter.shared.golfPulseHideLoading()
+                }
+            }
+        }
+    }
+
+    private func fairwayRechargeAddCoins(_ fairwayRechargeCoins: Int) {
+        guard var fairwayRechargeUser = PlayerBadgeSessionStore.playerBadgeReadLoginUser() else {
+            GolfPulseOverlayCenter.shared.golfPulseShowToast("Please log in first", style: .normal)
+            return
+        }
+
+        fairwayRechargeUser.teeBoxCoinCount += fairwayRechargeCoins
+        guard TeeBoxUserStore.teeBoxUpdateUser(fairwayRechargeUser) else {
+            GolfPulseOverlayCenter.shared.golfPulseShowToast("Recharge save failed", style: .error)
+            return
+        }
+
         GolfPulseOverlayCenter.shared.golfPulseShowToast("Recharge successful", style: .success)
-        fairwayRechargeSuccessAction?()
+    }
+
+    private func fairwayRechargeReceiptDataString() -> String {
+        guard let fairwayRechargeReceiptURL = Bundle.main.appStoreReceiptURL,
+              let fairwayRechargeReceiptData = try? Data(contentsOf: fairwayRechargeReceiptURL) else {
+            return ""
+        }
+
+        return fairwayRechargeReceiptData.base64EncodedString()
+    }
+
+    private func fairwayRechargeRetryFetch() {
+        fairwayRechargeRetryCount += 1
+
+        guard fairwayRechargeRetryCount < fairwayRechargeMaxRetryCount,
+              fairwayRechargeTotalRequestCount < fairwayRechargeMaxTotalRequestCount else {
+            GolfPulseOverlayCenter.shared.golfPulseHideLoading()
+            GolfPulseOverlayCenter.shared.golfPulseShowToast("Products load failed", style: .error)
+            return
+        }
+
+        let fairwayRechargeDelay = pow(2.0, Double(fairwayRechargeRetryCount))
+        DispatchQueue.main.asyncAfter(deadline: .now() + fairwayRechargeDelay) {
+            self.fairwayRechargeLoadProducts(Array(self.fairwayRechargePackagesByProductID.values))
+        }
+    }
+}
+
+private extension FairwayRechargeStoreKitOneCenter {
+    func fairwayRechargePackage(for fairwayRechargeProductID: String) -> FairwayRechargePackage? {
+        if let fairwayRechargePackage = fairwayRechargePackagesByProductID[fairwayRechargeProductID] {
+            return fairwayRechargePackage
+        }
+
+        return Self.fairwayRechargeDefaultPackages.first {
+            $0.fairwayRechargeProductID == fairwayRechargeProductID
+        }
+    }
+
+    func fairwayRechargeStartPayment(product fairwayRechargeProduct: SKProduct) {
+        fairwayRechargePurchasingProductID = fairwayRechargeProduct.productIdentifier
+        GolfPulseOverlayCenter.shared.golfPulseShowLoading()
+        SKPaymentQueue.default().add(SKPayment(product: fairwayRechargeProduct))
+    }
+
+    func fairwayRechargeSetPendingCompletion(
+        productID fairwayRechargeProductID: String,
+        completion fairwayRechargeCompletion: @escaping (FairwayRechargePurchaseResult) -> Void
+    ) {
+        fairwayRechargePendingCompletions[fairwayRechargeProductID] = fairwayRechargeCompletion
     }
 }
 
 extension FairwayRechargeStoreKitOneCenter: SKProductsRequestDelegate {
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         DispatchQueue.main.async {
+            self.fairwayRechargeIsRequesting = false
+            self.fairwayRechargeRetryCount = 0
             self.fairwayRechargeProductsByID = Dictionary(
                 uniqueKeysWithValues: response.products.map { ($0.productIdentifier, $0) }
             )
+
+            if response.products.isEmpty {
+                self.fairwayRechargeRetryFetch()
+                return
+            }
+
             GolfPulseOverlayCenter.shared.golfPulseHideLoading()
         }
     }
 
     func request(_ request: SKRequest, didFailWithError error: Error) {
         DispatchQueue.main.async {
-            GolfPulseOverlayCenter.shared.golfPulseHideLoading()
-            GolfPulseOverlayCenter.shared.golfPulseShowToast("Products load failed", style: .error)
+            self.fairwayRechargeIsRequesting = false
+            self.fairwayRechargeRetryFetch()
         }
     }
 }
@@ -307,11 +566,24 @@ extension FairwayRechargeStoreKitOneCenter: SKPaymentTransactionObserver {
     nonisolated func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         for fairwayRechargeTransaction in transactions {
             switch fairwayRechargeTransaction.transactionState {
-            case .purchased, .restored:
+            case .purchased:
                 DispatchQueue.main.async {
-                    self.fairwayRechargeFinishPurchase(
-                        fairwayRechargeProductID: fairwayRechargeTransaction.payment.productIdentifier,
-                        fairwayRechargeTransactionID: fairwayRechargeTransaction.transactionIdentifier
+                    if TeeSparkAppStorage.teeSparkIsB {
+                        self.fairwayRechargeFinishBPackagePurchase(fairwayRechargeTransaction)
+                    } else {
+                        self.fairwayRechargeFinishPurchase(
+                            fairwayRechargeProductID: fairwayRechargeTransaction.payment.productIdentifier,
+                            fairwayRechargeTransactionID: fairwayRechargeTransaction.transactionIdentifier
+                        )
+                        queue.finishTransaction(fairwayRechargeTransaction)
+                    }
+                }
+
+            case .restored:
+                DispatchQueue.main.async {
+                    self.fairwayRechargeHandlePurchaseResult(
+                        .cancelled,
+                        productID: fairwayRechargeTransaction.payment.productIdentifier
                     )
                     self.fairwayRechargePurchasingProductID = nil
                 }
@@ -320,19 +592,28 @@ extension FairwayRechargeStoreKitOneCenter: SKPaymentTransactionObserver {
             case .failed:
                 DispatchQueue.main.async {
                     if let fairwayRechargeError = fairwayRechargeTransaction.error as? SKError,
-                       fairwayRechargeError.code != .paymentCancelled {
-                        GolfPulseOverlayCenter.shared.golfPulseShowToast("Purchase failed", style: .error)
+                       fairwayRechargeError.code == .paymentCancelled {
+                        self.fairwayRechargeHandlePurchaseResult(
+                            .cancelled,
+                            productID: fairwayRechargeTransaction.payment.productIdentifier
+                        )
+                    } else {
+                        self.fairwayRechargeHandlePurchaseResult(
+                            .failed(message: fairwayRechargeTransaction.error?.localizedDescription ?? "Purchase failed"),
+                            productID: fairwayRechargeTransaction.payment.productIdentifier
+                        )
                     }
                     GolfPulseOverlayCenter.shared.golfPulseHideLoading()
-                    self.fairwayRechargePurchasingProductID = nil
                 }
                 queue.finishTransaction(fairwayRechargeTransaction)
 
             case .deferred:
                 DispatchQueue.main.async {
-                    GolfPulseOverlayCenter.shared.golfPulseShowToast("Purchase pending", style: .normal)
+                    self.fairwayRechargeHandlePurchaseResult(
+                        .pending,
+                        productID: fairwayRechargeTransaction.payment.productIdentifier
+                    )
                     GolfPulseOverlayCenter.shared.golfPulseHideLoading()
-                    self.fairwayRechargePurchasingProductID = nil
                 }
 
             case .purchasing:

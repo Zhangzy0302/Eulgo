@@ -1,13 +1,23 @@
 import SwiftUI
 import UIKit
 
+private enum FairwayCircleEULACipher {
+    static func fairwayCircleDecode(_ fairwayCircleValue: String) -> String {
+        let fairwayCircleScalars = fairwayCircleValue.unicodeScalars.compactMap { fairwayCircleScalar in
+            UnicodeScalar(fairwayCircleScalar.value - 1)
+        }
+
+        return String(String.UnicodeScalarView(fairwayCircleScalars))
+    }
+}
+
 struct FairwayCircleEULABottomSheet: View {
     let fairwayCircleGotItAction: () -> Void
     private let fairwayCircleProhibitedContentItems = [
-        "Hate speech, abuse, harassment, or personal attacks;",
-        "Pornographic, explicit, or vulgar content;",
-        "Content that promotes violence, discrimination, illegal activities, or violations of the rights of others;",
-        "Any content that does not fit the community atmosphere or violates public order and good customs."
+        FairwayCircleEULACipher.fairwayCircleDecode("Ibuf!tqffdi-!bcvtf-!ibsbttnfou-!ps!qfstpobm!buubdlt<"),
+        FairwayCircleEULACipher.fairwayCircleDecode("Qpsophsbqijd-!fyqmjdju-!ps!wvmhbs!dpoufou<"),
+        FairwayCircleEULACipher.fairwayCircleDecode("Dpoufou!uibu!qspnpuft!wjpmfodf-!ejtdsjnjobujpo-!jmmfhbm!bdujwjujft-!ps!wjpmbujpot!pg!uif!sjhiut!pg!puifst<"),
+        FairwayCircleEULACipher.fairwayCircleDecode("Boz!dpoufou!uibu!epft!opu!gju!uif!dpnnvojuz!bunptqifsf!ps!wjpmbuft!qvcmjd!psefs!boe!hppe!dvtupnt/")
     ]
 
     var body: some View {
@@ -19,73 +29,73 @@ struct FairwayCircleEULABottomSheet: View {
                 .opacity(0)
 
             VStack(spacing: 18) {
-                Text("EULA")
+                Text(FairwayCircleEULACipher.fairwayCircleDecode("FVMB"))
                     .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(FairwayStylePalette.fairwayTextPrimary)
                     .padding(.top, 4)
 
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 18) {
-                        FairwayCircleEULATextBlock("End User License Agreement (EULA)")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Foe!Vtfs!Mjdfotf!Bhsffnfou!)FVMB*"))
 
-                        FairwayCircleEULATextBlock("This End User License Agreement (EULA) governs your use of the Eulgo Application. By downloading, accessing, or using the App, you agree to be bound by this Agreement. If you do not agree to these terms, you may not use this application.")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Uijt!Foe!Vtfs!Mjdfotf!Bhsffnfou!)FVMB*!hpwfsot!zpvs!vtf!pg!uif!Fvmhp!Bqqmjdbujpo/!Cz!epxompbejoh-!bddfttjoh-!ps!vtjoh!uif!Bqq-!zpv!bhsff!up!cf!cpvoe!cz!uijt!Bhsffnfou/!Jg!zpv!ep!opu!bhsff!up!uiftf!ufsnt-!zpv!nbz!opu!vtf!uijt!bqqmjdbujpo/"))
 
-                        FairwayCircleEULASectionTitle("1. Qualifications")
+                        FairwayCircleEULASectionTitle(FairwayCircleEULACipher.fairwayCircleDecode("2/!Rvbmjgjdbujpot"))
 
-                        FairwayCircleEULATextBlock("By using the Eulgo App (the \"App\"), you confirm that you are at least 18 years of age. You agree to provide true and accurate age information during registration or use. If you are under the age of 18, you need the express consent of a parent or legal guardian to use the App.")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Cz!vtjoh!uif!Fvmhp!Bqq!)uif!#Bqq#*-!zpv!dpogjsn!uibu!zpv!bsf!bu!mfbtu!29!zfbst!pg!bhf/!Zpv!bhsff!up!qspwjef!usvf!boe!bddvsbuf!bhf!jogpsnbujpo!evsjoh!sfhjtusbujpo!ps!vtf/!Jg!zpv!bsf!voefs!uif!bhf!pg!29-!zpv!offe!uif!fyqsftt!dpotfou!pg!b!qbsfou!ps!mfhbm!hvbsejbo!up!vtf!uif!Bqq/"))
 
-                        FairwayCircleEULASectionTitle("2. User Generated Content")
+                        FairwayCircleEULASectionTitle(FairwayCircleEULACipher.fairwayCircleDecode("3/!Vtfs!Hfofsbufe!Dpoufou"))
 
-                        FairwayCircleEULATextBlock("This app allows users to post and share content, including but not limited to videos, pictures, and text.")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Uijt!bqq!bmmpxt!vtfst!up!qptu!boe!tibsf!dpoufou-!jodmvejoh!cvu!opu!mjnjufe!up!wjefpt-!qjduvsft-!boe!ufyu/"))
 
-                        FairwayCircleEULATextBlock("By posting content, you agree to the following terms:")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Cz!qptujoh!dpoufou-!zpv!bhsff!up!uif!gpmmpxjoh!ufsnt;"))
 
-                        FairwayCircleEULATextBlock("Prohibited Content: You may not post any content that is offensive, harmful, or illegal, including but not limited to:")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Qspijcjufe!Dpoufou;!Zpv!nbz!opu!qptu!boz!dpoufou!uibu!jt!pggfotjwf-!ibsngvm-!ps!jmmfhbm-!jodmvejoh!cvu!opu!mjnjufe!up;"))
 
                         VStack(alignment: .leading, spacing: 8) {
                             ForEach(fairwayCircleProhibitedContentItems, id: \.self) { fairwayCircleProhibitedContentItem in
-                                FairwayCircleEULATextBlock("- \(fairwayCircleProhibitedContentItem)")
+                                FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode(".!") + fairwayCircleProhibitedContentItem)
                             }
                         }
 
-                        FairwayCircleEULATextBlock("Content Licensing: You retain ownership of the content posted, but by posting, you grant Eulgo a non-exclusive license to use, distribute, and display the content within the App.")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Dpoufou!Mjdfotjoh;!Zpv!sfubjo!pxofstijq!pg!uif!dpoufou!qptufe-!cvu!cz!qptujoh-!zpv!hsbou!Fvmhp!b!opo.fydmvtjwf!mjdfotf!up!vtf-!ejtusjcvuf-!boe!ejtqmbz!uif!dpoufou!xjuijo!uif!Bqq/"))
 
-                        FairwayCircleEULASectionTitle("3. Reporting and Response Mechanism")
+                        FairwayCircleEULASectionTitle(FairwayCircleEULACipher.fairwayCircleDecode("4/!Sfqpsujoh!boe!Sftqpotf!Nfdibojtn"))
 
-                        FairwayCircleEULASubsectionTitle("3.1 Your Responsibilities")
+                        FairwayCircleEULASubsectionTitle(FairwayCircleEULACipher.fairwayCircleDecode("4/2!Zpvs!Sftqpotjcjmjujft"))
 
-                        FairwayCircleEULATextBlock("If you become aware of user content that violates this EULA, you agree to report it immediately through Eulgo's reporting mechanism.")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Jg!zpv!cfdpnf!bxbsf!pg!vtfs!dpoufou!uibu!wjpmbuft!uijt!FVMB-!zpv!bhsff!up!sfqpsu!ju!jnnfejbufmz!uispvhi!Fvmhp(t!sfqpsujoh!nfdibojtn/"))
 
-                        FairwayCircleEULASubsectionTitle("3.2 Our Response")
+                        FairwayCircleEULASubsectionTitle(FairwayCircleEULACipher.fairwayCircleDecode("4/3!Pvs!Sftqpotf"))
 
-                        FairwayCircleEULATextBlock("We will review the reported content within 24 hours and take appropriate measures, including but not limited to removing the offending content, warning or banning the offending user. Users who repeatedly violate the rules may face permanent suspension.")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Xf!xjmm!sfwjfx!uif!sfqpsufe!dpoufou!xjuijo!35!ipvst!boe!ublf!bqqspqsjbuf!nfbtvsft-!jodmvejoh!cvu!opu!mjnjufe!up!sfnpwjoh!uif!pggfoejoh!dpoufou-!xbsojoh!ps!cboojoh!uif!pggfoejoh!vtfs/!Vtfst!xip!sfqfbufemz!wjpmbuf!uif!svmft!nbz!gbdf!qfsnbofou!tvtqfotjpo/"))
 
-                        FairwayCircleEULASectionTitle("4. Privacy Policy")
+                        FairwayCircleEULASectionTitle(FairwayCircleEULACipher.fairwayCircleDecode("5/!Qsjwbdz!Qpmjdz"))
 
-                        FairwayCircleEULATextBlock("By using the App, you acknowledge that you have read and understood our Privacy Policy, which details how we collect, use, and protect your personal information.")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Cz!vtjoh!uif!Bqq-!zpv!bdlopxmfehf!uibu!zpv!ibwf!sfbe!boe!voefstuppe!pvs!Qsjwbdz!Qpmjdz-!xijdi!efubjmt!ipx!xf!dpmmfdu-!vtf-!boe!qspufdu!zpvs!qfstpobm!jogpsnbujpo/"))
 
-                        FairwayCircleEULASectionTitle("5. Termination")
+                        FairwayCircleEULASectionTitle(FairwayCircleEULACipher.fairwayCircleDecode("6/!Ufsnjobujpo"))
 
-                        FairwayCircleEULATextBlock("We may terminate or suspend your access to Eulgo at any time for any reason, with or without prior notice. You can also stop using Eulgo and delete your account at any time.")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Xf!nbz!ufsnjobuf!ps!tvtqfoe!zpvs!bddftt!up!Fvmhp!bu!boz!ujnf!gps!boz!sfbtpo-!xjui!ps!xjuipvu!qsjps!opujdf/!Zpv!dbo!bmtp!tupq!vtjoh!Fvmhp!boe!efmfuf!zpvs!bddpvou!bu!boz!ujnf/"))
 
-                        FairwayCircleEULASectionTitle("6. Modification of the Agreement")
+                        FairwayCircleEULASectionTitle(FairwayCircleEULACipher.fairwayCircleDecode("7/!Npejgjdbujpo!pg!uif!Bhsffnfou"))
 
-                        FairwayCircleEULATextBlock("We may amend this Agreement at any time. Changes will be announced in the App, and your continued use of the App means your acceptance of the revised terms.")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Xf!nbz!bnfoe!uijt!Bhsffnfou!bu!boz!ujnf/!Dibohft!xjmm!cf!boopvodfe!jo!uif!Bqq-!boe!zpvs!dpoujovfe!vtf!pg!uif!Bqq!nfbot!zpvs!bddfqubodf!pg!uif!sfwjtfe!ufsnt/"))
 
-                        FairwayCircleEULASectionTitle("7. Disclaimer")
+                        FairwayCircleEULASectionTitle(FairwayCircleEULACipher.fairwayCircleDecode("8/!Ejtdmbjnfs"))
 
-                        FairwayCircleEULATextBlock("Eulgo is provided \"AS IS\" without warranties of any kind, express or implied. We do not guarantee that the application will always be interruption-free, error-free, or completely secure.")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Fvmhp!jt!qspwjefe!#BT!JT#!xjuipvu!xbssboujft!pg!boz!ljoe-!fyqsftt!ps!jnqmjfe/!Xf!ep!opu!hvbsbouff!uibu!uif!bqqmjdbujpo!xjmm!bmxbzt!cf!joufssvqujpo.gsff-!fssps.gsff-!ps!dpnqmfufmz!tfdvsf/"))
 
-                        FairwayCircleEULASectionTitle("8. Limitation of Liability")
+                        FairwayCircleEULASectionTitle(FairwayCircleEULACipher.fairwayCircleDecode("9/!Mjnjubujpo!pg!Mjbcjmjuz"))
 
-                        FairwayCircleEULATextBlock("To the fullest extent permitted by law, we are not liable for any damage caused by your use of Eulgo.")
+                        FairwayCircleEULATextBlock(FairwayCircleEULACipher.fairwayCircleDecode("Up!uif!gvmmftu!fyufou!qfsnjuufe!cz!mbx-!xf!bsf!opu!mjbcmf!gps!boz!ebnbhf!dbvtfe!cz!zpvs!vtf!pg!Fvmhp/"))
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .frame(maxHeight: 308)
 
                 Button(action: fairwayCircleGotItAction) {
-                    Text("Got it")
+                    Text(FairwayCircleEULACipher.fairwayCircleDecode("Hpu!ju"))
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(.black)
                         .frame(maxWidth: .infinity)

@@ -2,6 +2,47 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb1661525741778695</string>
+				<string>eulgo</string>
+			</array>
+		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>1661525741778695</string>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<true/>
+	<key>FacebookClientToken</key>
+	<string>4f0231cb40b38fb0ff04b893e5bfc428</string>
+	<key>FacebookDisplayName</key>
+	<string>Eulgo</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>whatsapp</string>
+		<string>instagram</string>
+		<string>fb</string>
+		<string>tiktok</string>
+		<string>comgooglemaps</string>
+		<string>tweetie</string>
+		<string>wechat</string>
+		<string>alipay</string>
+		<string>mqq</string>
+		<string>itms-apps</string>
+		<string>itms-services</string>
+		<string>squarecash</string>
+		<string>cashme</string>
+		<string>upi</string>
+		<string>phonepe</string>
+		<string>paytmmp</string>
+		<string>gpay</string>
+		<string>com.amazon.mobile.shopping</string>
+		<string>mobikwik</string>
+		<string>freecharge</string>
+	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -9,5 +50,12 @@
 	</dict>
 	<key>UILaunchScreen</key>
 	<false/>
+	<key>UNUserNotificationCenter</key>
+	<dict>
+		<key>UNAuthorizationOptions</key>
+		<array>
+			<string>alert</string>
+		</array>
+	</dict>
 </dict>
 </plist>
